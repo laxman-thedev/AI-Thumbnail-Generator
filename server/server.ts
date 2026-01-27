@@ -5,6 +5,7 @@ import { connect } from 'node:http2';
 import connectDB from './configs/db.js';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
+import AuthRouter from './routes/authRoutes.js';
 
 declare module 'express-session' {
     interface SessionData {
@@ -36,6 +37,7 @@ app.use(express.json());
 app.get('/', (req: Request, res: Response) => {
     res.send('Server is Live!');
 });
+app.use('/api/auth',AuthRouter)
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
