@@ -74,3 +74,16 @@ export const loginUser = async(req: Request, res: Response) => {
         res.status(500).json({ message: error.message });
       }
 }
+
+// controller for user logout
+
+export const logoutUser = (req: Request, res: Response) => {
+    req.session.destroy((error) => {
+       if(error){
+        console.log(error);
+        return res.status(500).json({message:error.message});
+       }
+    })
+    return res.json({message:"Logged out successfully"});
+
+}
