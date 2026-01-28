@@ -5,7 +5,7 @@ import { connect } from 'node:http2';
 import connectDB from './configs/db.js';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
-import AuthRouter from './routes/authRoutes.js';
+import AuthRouter from './routes/AuthRoutes.js';
 
 declare module 'express-session' {
     interface SessionData {
