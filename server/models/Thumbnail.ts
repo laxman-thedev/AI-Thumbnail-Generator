@@ -18,7 +18,6 @@ export interface IThumbnail extends Document {
 }
 
 const ThumbnailSchema = new  mongoose.Schema<IThumbnail>({
-     _id: {type:String,ref:'User',required:true},
     userId: {type:String,ref:'User',required:true},
     title: {type:String,trim:true,required:true},
     description: {type:String,trim:true},
