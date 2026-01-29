@@ -4,6 +4,7 @@ import { GenerateContentConfig, HarmBlockThreshold, HarmCategory } from '@google
 import ai from '../configs/ai.js';
 import path from 'path';
 import fs from 'fs';
+import {v2 as cloudinary} from 'cloudinary';
 
 
 const stylePrompts = {
@@ -46,8 +47,80 @@ export const generateThumbnail = async (req:Request, res:Response) => {
             text_overlay ,
             isGenerating:true
         })
-         
-     }catch(error:any){
+         const model = 'gemini-3-pro-image-preview';
 
+         const generationconfig :GenerateContentConfig = {
+            maxOutputTokens:32768,
+            temperature:1,
+            topP:0.95,
+            responseModalities:['IMAGE'],
+            imageConfig:{
+                aspectRatio:'16:9',
+                imageSize:'1K'
+        },
+
+            safetySettings:[
+                {category:HarmCategory.HARM_CATEGORY_HATE_SPEECH,threshold:HarmBlockThreshold.OFF},
+                {category:HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,threshold:HarmBlockThreshold.OFF},
+                {category:HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,threshold:HarmBlockThreshold.OFF},
+                {category:HarmCategory.HARM_CATEGORY_HARASSMENT,threshold:HarmBlockThreshold.OFF}
+
+            ]
+        
+     } 
+    
+     let prompt = `Create a ${stylePrompts[style as keyof typeof stylePrompts]} for: "${title}"`;
+     if(color_scheme){
+        prompt += ` Use a ${colorSchemeDescriptions[color_scheme as keyof typeof colorSchemeDescriptions]} color scheme.`;
+     }
+
+     if(user_prompt){
+        prompt += ` Additional details: ${user_prompt}`;
+     }
+
+
+        prompt += `The Thumbnail should  be ${aspect_ratio},visually stunning and designed to maximize click-through rate.make it bold, proffessional ,and impossible to ignore.`;
+
+        //generate image using Gemini API
+        const response:any = await ai.models.generateContent({
+            model,
+            contents : [prompt],
+            config : generationconfig
+        })
+
+        if(!response?.candidates?.[0].content?.parts){
+             throw new Error('Image generation failed');
+        }
+        const parts = response.candidates[0].content.parts;
+
+        let finalBuffer:Buffer | null = null;
+
+        for(const part of parts){
+            if(part.inlineData){
+                finalBuffer = Buffer.from(part.inlineData,'base64');
+            }
+        }
+        const filename = `final-output-${Date.now()}.png`;
+        const filePath = path.join(`images`,filename);
+
+
+        fs.mkdirSync('images',{recursive:true})
+
+        fs.writeFileSync(filePath, finalBuffer!);
+
+        const uploadResult = await cloudinary.uploader.upload(filePath, {resource_type: "image"});
+
+        thumbnail.image_url = uploadResult.url;
+
+        thumbnail.isGenerating = false;
+
+        await thumbnail.save();
+
+        res.json({MessageChannel:"Thumbnail generated successfully",thumbnail});
+
+        fs.unlinkSync(filePath);
+     }catch(error:any){
+        console.log(error);
+        res.status(500).json({message:error.message});
      }
 } 
