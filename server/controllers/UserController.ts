@@ -18,7 +18,7 @@ export const getUserThumbnails = async (req:Request, res:Response) => {
 export const getThumbnailById = async (req:Request, res:Response) => {
     try {
         const {userId} = req.session;
-        const id = req.params
+        const {id} = req.params
 
         const thumbnail = await Thumbnail.findOne({_id:id,userId});
         res.json({thumbnail})
