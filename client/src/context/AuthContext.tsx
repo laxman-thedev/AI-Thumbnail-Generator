@@ -2,7 +2,6 @@ import { createContext,use,useContext,useEffect,useState} from "react";
 import type { IUser } from "../assets/assets";
 import api from "../configs/api";
 import toast from "react-hot-toast";
-import { log } from "console";
 
 interface AuthContextProps{
     isLoggedIn: boolean;
