@@ -55,9 +55,8 @@ const MyGeneration = () => {
     }
 
     useEffect(() => {
-        if(!isLoggedIn) {
+        if(isLoggedIn) {
         fetchThumbnails()
-           
         }
     }, [isLoggedIn])
 
