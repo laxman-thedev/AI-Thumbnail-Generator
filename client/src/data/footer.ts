@@ -1,5 +1,10 @@
 import type { IFooter } from "../types";
 
+/**
+ * Footer navigation data organized by section.
+ * Each section has a title and an array of links rendered
+ * as columns in the Footer component.
+ */
 export const footerData: IFooter[] = [
     {
         title: "Product",

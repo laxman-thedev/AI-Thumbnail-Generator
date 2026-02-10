@@ -4,7 +4,13 @@ import TiltedImage from "../components/TiltImage";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * HeroSection - The top hero banner of the landing page.
+ * Contains an animated "NEW" badge, main headline, subtitle, CTA buttons,
+ * feature bullet points, and a 3D-tilting showcase image.
+ */
 export default function HeroSection() {
+    // Quick feature bullet points displayed below the CTA buttons
     const specialFeatures = [
         "No design skills needed",
         "Fast generation",
@@ -15,7 +21,9 @@ export default function HeroSection() {
 
     return (
         <div className="relative flex flex-col items-center justify-center px-4 md:px-16 lg:px-24 xl:px-32">
+            {/* Background decorative pink blur */}
             <div className="absolute top-30 -z-10 left-1/4 size-72 bg-pink-600 blur-[300px]"></div>
+            {/* Animated "NEW" badge linking to the generate page */}
             <motion.a onClick={()=>navigate('/generate')} className="group flex items-center gap-2 rounded-full p-1 pr-3 mt-44 text-pink-100 bg-pink-200/15 cursor-pointer"
                 initial={{ y: -20, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
@@ -30,6 +38,7 @@ export default function HeroSection() {
                     <ChevronRightIcon size={16} className="group-hover:translate-x-0.5 transition duration-300" />
                 </p>
             </motion.a>
+            {/* Main hero headline with gradient-styled "Videos" text */}
             <motion.h1 className="text-5xl/17 md:text-6xl/21 font-medium max-w-3xl text-center"
                 initial={{ y: 50, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
@@ -38,6 +47,7 @@ export default function HeroSection() {
             >
                 AI Thumbnail Generator for your <span className="move-gradient px-3 rounded-xl text-nowrap">Videos.</span>
             </motion.h1>
+            {/* Subtitle describing the value proposition */}
             <motion.p className="text-base text-center text-slate-200 max-w-lg mt-6"
                 initial={{ y: 50, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
@@ -46,6 +56,7 @@ export default function HeroSection() {
             >
                 Stop wasting time designing thumbnails. Let our AI create eye-catching thumbnails that boost your video views and engagement.
                 </motion.p>
+            {/* Primary and secondary CTA buttons */}
             <motion.div className="flex items-center gap-4 mt-8"
                 initial={{ y: 50, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
@@ -61,6 +72,7 @@ export default function HeroSection() {
                 </button>
             </motion.div>
 
+            {/* Feature bullet points with staggered animations */}
             <div className="flex flex-wrap justify-center items-center gap-4 md:gap-14 mt-12">
                 {specialFeatures.map((feature, index) => (
                     <motion.p className="flex items-center gap-2" key={index}
@@ -74,6 +86,7 @@ export default function HeroSection() {
                     </motion.p>
                 ))}
             </div>
+            {/* 3D tilt-on-hover hero showcase image */}
             <TiltedImage />
         </div>
     );

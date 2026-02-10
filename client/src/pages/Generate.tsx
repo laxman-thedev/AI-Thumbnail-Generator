@@ -10,24 +10,41 @@ import { useAuth } from "../context/AuthContext"
 import toast from "react-hot-toast"
 import api from "../configs/api"
 
+/**
+ * Generate - Thumbnail generation page.
+ * Left panel: form inputs for title, aspect ratio, style, color scheme, and additional prompts.
+ * Right panel: live preview of the generated thumbnail.
+ * Supports creating new thumbnails and viewing existing ones via URL param `id`.
+ * Polls the server every 5 seconds while a thumbnail is being generated.
+ */
 const Generate = () => {
 
+    // URL parameter for editing/viewing an existing thumbnail
     const {id} = useParams()
     const {pathname} = useLocation()
     const navigate = useNavigate()
     const {isLoggedIn} = useAuth()
+
+    // Form state for thumbnail generation inputs
     const [title, setTitle] = useState("")
     const [additionalDetails, setAdditionalDetails] = useState("")
 
+    // Generated thumbnail data and loading flag
     const [thumbnail, setThumbnail] = useState<IThumbnail | null>(null)
     const [loading, setLoading] = useState(false)
 
+    // Selector state for aspect ratio, color scheme, and style
     const [aspectRatio, setAspectRatio] = useState<AspectRatio>("16:9")
     const [colorSchemeId, setColorSchemeId] = useState<string>(colorSchemes[0].id)
     const [style, setStyle] = useState<ThumbnailStyle>("Bold & Graphic")
 
+    // Controls the style dropdown open/close state
     const [styleDropdownOpen, setStyleDropdownOpen] = useState(false)
 
+    /**
+     * Sends the generation request to the API.
+     * Validates login status and title, then navigates to the generated thumbnail page.
+     */
     const handleGenerate = async () => {
         if(!isLoggedIn) return toast.error("Please login to generate thumbnails")
             if(!title.trim()) return toast.error("Title cannot be empty")
@@ -48,6 +65,11 @@ const Generate = () => {
         }
     }
 
+    /**
+     * Fetches an existing thumbnail by ID from the API.
+     * Populates form fields with the thumbnail's saved settings and
+     * sets loading state based on whether the image URL is available yet.
+     */
     const fetchThumbnail = async ()=> {
         try {
             const {data} = await api.get(`/api/user/thumbnails/${id}`);
@@ -64,6 +86,7 @@ const Generate = () => {
         }
     }
 
+    // Fetch thumbnail on mount if `id` is present; poll every 5s while still loading
     useEffect(() => {
         if (isLoggedIn && id) {
             fetchThumbnail()
@@ -76,6 +99,7 @@ const Generate = () => {
         }
     }, [id,loading,isLoggedIn]);
 
+    // Reset thumbnail state when navigating away from an existing thumbnail
     useEffect(() => { 
         if(!id && thumbnail){
             setThumbnail(null)
@@ -89,7 +113,7 @@ const Generate = () => {
             <div className="pt-24 min-h-screen">
                 <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-28 lg:pb-8">
                     <div className="grid lg:grid-cols-[400px_1fr] gap-8">
-                        {/* Left Panel */}
+                        {/* Left Panel - Generation form (disabled when viewing an existing thumbnail) */}
                         <div className={`space-y-6 ${id && 'pointer-events-none'}`}>
                             <div className="p-6 rounded-2xl bg-white/8 border border-white/12 shadow-xl space-y-6">
                                 <div>
@@ -98,7 +122,7 @@ const Generate = () => {
                                 </div>
 
                                 <div className="space-y-5">
-                                    {/* TITLE INPUT */}
+                                    {/* Title input with character counter */}
                                     <div className="space-y-2">
                                         <label htmlFor="title" className="block text-sm font-medium">Title or Topic</label>
                                         <input
@@ -124,7 +148,7 @@ const Generate = () => {
                                     {/* Color Scheme Selector */}
                                     <ColorSchemaSelector value={colorSchemeId} onChange={setColorSchemeId} />
 
-                                    {/* Details */}
+                                    {/* Optional additional prompt textarea */}
                                     <div className="space-y-2">
                                         <label className="block text-sm font-medium">
                                             Additional Prompts <span className="text-zinc-400 text-xs">(optional)</span>
@@ -134,7 +158,7 @@ const Generate = () => {
 
                                 </div>
 
-                                {/* BUTTON */}
+                                {/* Generate button - only shown when creating a new thumbnail (no id) */}
                                 {!id && (
                                     <button onClick={handleGenerate} className="text-[15px] w-full py-3.5 rounded-xl font-medium bg-linear-to-b from-pink-500 to-pink-600 hover:from-pink-700 disabled:cursor-not-allowed transition-colors">
                                         {loading ? 'Generating...' : 'Generate Thumbnail'}
@@ -143,7 +167,7 @@ const Generate = () => {
                             </div>
                         </div>
 
-                        {/* Right Panel */}
+                        {/* Right Panel - Thumbnail preview */}
                         <div>
                             <div className="p-6 rounded-2xl bg-white/8 border border-white/10 shadow-xl">
                                 <h2 className="text-lg font-semibold text-zinc-100">Preview</h2>

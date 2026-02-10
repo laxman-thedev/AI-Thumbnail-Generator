@@ -1,5 +1,10 @@
 import type { IFeature } from "../types";
 
+/**
+ * Feature card data rendered in the FeaturesSection.
+ * Each entry includes an SVG icon path, title, and short description
+ * displayed in animated cards on the landing page.
+ */
 export const featuresData: IFeature[] = [
     {
         icon: "/assets/zap-icon.svg",

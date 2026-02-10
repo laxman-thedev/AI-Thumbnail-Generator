@@ -2,6 +2,11 @@
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * CTASection - Call-to-action banner encouraging users to start generating.
+ * Features an animated headline, subtitle, and a "Generate Free Thumbnail"
+ * button that navigates to the /generate page.
+ */
 export default function CTASection() {
 
     const navigate = useNavigate()
@@ -14,6 +19,7 @@ export default function CTASection() {
             transition={{ type: "spring", stiffness: 320, damping: 70, mass: 1 }}
         >
             <div>
+                {/* Gradient headline text */}
                 <motion.h1 className="text-4xl md:text-[46px] md:leading-15 font-semibold bg-linear-to-r from-white to-pink-400 text-transparent bg-clip-text"
                     initial={{ y: 80, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}
@@ -22,6 +28,7 @@ export default function CTASection() {
                 >
                     Ready to go viral?
                 </motion.h1>
+                {/* Supporting subtitle */}
                 <motion.p className="bg-linear-to-r from-white to-pink-400 text-transparent bg-clip-text text-lg"
                     initial={{ y: 80, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}
@@ -31,6 +38,7 @@ export default function CTASection() {
                     Join thousands of creators boosting their CTR.
                 </motion.p>
             </div>
+            {/* CTA button navigating to the generate page */}
             <motion.button onClick={()=> navigate('/generate')} className="px-12 py-3 text-slate-800 bg-white hover:bg-slate-200 rounded-full text-sm mt-4"
                 initial={{ y: 80, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}

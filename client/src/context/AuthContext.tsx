@@ -3,6 +3,7 @@ import type { IUser } from "../assets/assets";
 import api from "../configs/api";
 import toast from "react-hot-toast";
 
+/** Shape of the authentication context values and methods */
 interface AuthContextProps{
     isLoggedIn: boolean;
     setIsLoggedIn: (isLoggedIn: boolean) => void;
@@ -13,7 +14,7 @@ interface AuthContextProps{
     logout:()=>Promise<void>;
 }
 
-
+/** Create context with default no-op values for type safety */
 const AuthContext = createContext<AuthContextProps>({
     isLoggedIn: false,
     setIsLoggedIn: () => {},
@@ -24,11 +25,18 @@ const AuthContext = createContext<AuthContextProps>({
     logout: async () => {},
 })
 
+/**
+ * AuthProvider - Wraps the app to provide global authentication state.
+ * Manages user login, signup, logout, and session verification on mount.
+ */
 export const AuthProvider = ({children}:{children:React.ReactNode})=>{
 
+    // Current authenticated user object (null when logged out)
     const [user,setUser] = useState<IUser | null>(null);
+    // Boolean flag indicating whether the user is logged in
     const [isLoggedIn,setIsLoggedIn] = useState<boolean>(false);
 
+    /** Register a new user and update auth state on success */
     const signUp = async ({name,email,password}:{name:string,email:string,password:string}) => {
         try {
             const {data} = await api.post('/api/auth/register',{name,email,password});
@@ -42,6 +50,7 @@ export const AuthProvider = ({children}:{children:React.ReactNode})=>{
         }
     }
 
+    /** Log in an existing user and update auth state on success */
     const login = async ({email,password}:{email:string,password:string}) => {
         try {
             const {data} = await api.post('/api/auth/login',{email,password});
@@ -55,6 +64,7 @@ export const AuthProvider = ({children}:{children:React.ReactNode})=>{
         }
     }
 
+    /** Log out the current user, clear state, and show a toast */
     const logout = async () => {
         try {
             const {data} = await api.post('/api/auth/logout');
@@ -66,6 +76,7 @@ export const AuthProvider = ({children}:{children:React.ReactNode})=>{
         }
     }
 
+    /** Verify the user's session on mount via the /api/auth/verify endpoint */
     const fetchUser = async () => {
         try {
             const {data} = await api.get('/api/auth/verify');
@@ -79,12 +90,14 @@ export const AuthProvider = ({children}:{children:React.ReactNode})=>{
         }
     }
 
+    // On mount, verify if the user has an active session
     useEffect(() => {
         (async () => {
             await fetchUser();
         })()
     },[]);
 
+    // Provide auth state and methods to all child components
     const value = {
           user,setUser,
           isLoggedIn,setIsLoggedIn,signUp,
@@ -97,4 +110,5 @@ export const AuthProvider = ({children}:{children:React.ReactNode})=>{
     )
 }
 
+/** Custom hook to consume the AuthContext from any component */
 export const useAuth = () => useContext(AuthContext);

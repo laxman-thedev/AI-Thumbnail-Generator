@@ -3,11 +3,17 @@ import SectionTitle from "../components/SectionTitle";
 import { ArrowRightIcon, MailIcon, UserIcon } from "lucide-react";
 import { motion } from "motion/react";
 
+/**
+ * ContactSection - Contact form section with name, email, and message fields.
+ * Each field animates in from below on scroll. Form submission is prevented
+ * (no backend handler connected). Uses a two-column grid on larger screens.
+ */
 export default function ContactSection() {
     return (
         <div className="px-4 md:px-16 lg:px-24 xl:px-32">
             <SectionTitle text1="Contact" text2="Grow your channel" text3="Have questions or need assistance? We're here to help you succeed." />
             <form onSubmit={(e) => e.preventDefault()} className='grid sm:grid-cols-2 gap-3 sm:gap-5 max-w-2xl mx-auto text-slate-300 mt-16 w-full' >
+                {/* Name input field */}
                 <motion.div
                     initial={{ y: 150, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}
@@ -21,6 +27,7 @@ export default function ContactSection() {
                     </div>
                 </motion.div>
 
+                {/* Email input field */}
                 <motion.div
                     initial={{ y: 150, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}
@@ -34,6 +41,7 @@ export default function ContactSection() {
                     </div>
                 </motion.div>
 
+                {/* Message textarea spanning both columns */}
                 <motion.div className='sm:col-span-2'
                     initial={{ y: 150, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}
@@ -44,6 +52,7 @@ export default function ContactSection() {
                     <textarea name='message' rows={8} placeholder='Enter your message' className='focus:border-pink-500 resize-none w-full p-3 outline-none rounded-lg border border-slate-700' />
                 </motion.div>
 
+                {/* Submit button */}
                 <motion.button type='submit' className='w-max flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white px-10 py-3 rounded-full'
                     initial={{ y: 150, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}

@@ -1,5 +1,11 @@
 import type { ITestimonial } from "../types";
 
+/**
+ * Testimonial data displayed in the TestimonialSection marquee.
+ * Each entry contains a user avatar URL, display name, social handle,
+ * date, and quote. The array is duplicated at render time to create
+ * seamless infinite-scroll marquee rows.
+ */
 export const testimonialsData: ITestimonial[] = [
     {
         image: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200',
