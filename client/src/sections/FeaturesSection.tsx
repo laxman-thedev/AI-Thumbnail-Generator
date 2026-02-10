@@ -5,10 +5,16 @@ import { motion } from "motion/react";
 import { featuresData } from "../data/features";
 import type { IFeature } from "../types";
 
+/**
+ * FeaturesSection - Showcases product features in two areas:
+ * 1. A grid of feature cards with icons, titles, and descriptions
+ * 2. A showcase area with images and descriptive text highlighting AI benefits
+ */
 export default function FeaturesSection() {
     return (
         <div id="features" className="px-4 md:px-16 lg:px-24 xl:px-32">
             <SectionTitle text1="Features" text2="Why use our generator?" text3="Create stunning thumbnails that get clicks, without hassle." />
+            {/* Feature cards grid with staggered entrance animations */}
             <div className="flex flex-wrap items-center justify-center gap-6 md:gap-4 mt-16 px-6">
                 {featuresData.map((feature: IFeature, index: number) => (
                     <motion.div key={index} className={`${index === 1 ? 'p-px rounded-[13px] bg-linear-to-br from-pink-600 to-slate-800' : ''}`}
@@ -29,7 +35,9 @@ export default function FeaturesSection() {
                     </motion.div>
                 ))}
             </div>
+            {/* Feature showcase area with images and descriptive copy */}
             <div className="mt-40 relative mx-auto max-w-5xl">
+                {/* Decorative background blur */}
                 <div className="absolute -z-50 size-100 -top-10 -left-20 aspect-square rounded-full bg-pink-500/40 blur-3xl"></div>
                 <motion.p className="text-slate-300 text-lg text-left max-w-3xl"
                     initial={{ y: 150, opacity: 0 }}
@@ -39,6 +47,7 @@ export default function FeaturesSection() {
                 >
                     Experience the future of thumbnail creation with our AI-powered generator.
                 </motion.p>
+                {/* Two-column layout: large image left, smaller image + text right */}
                 <div className="grid grid-cols-1 md:grid-cols-3 mt-8 gap-10">
                     <motion.div className="md:col-span-2"
                         initial={{ y: 150, opacity: 0 }}

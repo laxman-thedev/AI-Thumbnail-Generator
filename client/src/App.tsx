@@ -11,19 +11,30 @@ import Login from "./components/Login";
 import { useEffect } from "react";
 import {Toaster} from "react-hot-toast"
 
+/**
+ * App - Root component that defines the application layout and routing.
+ * Renders global elements (Toaster, LenisScroll, Navbar, Footer) and
+ * sets up client-side routes for all pages. Scrolls to top on route change.
+ */
 export default function App() {
 
+    // Track current pathname to trigger scroll-to-top on navigation
     const {pathname} = useLocation();
 
+    // Scroll to top whenever the route changes
     useEffect(()=> {
         window.scrollTo(0, 0);
     }, [pathname])
 
     return (
         <>
+            {/* Toast notification container */}
             <Toaster />
+            {/* Smooth scroll behavior via Lenis */}
             <LenisScroll />
+            {/* Persistent top navigation bar */}
             <Navbar />
+            {/* Application route definitions */}
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/generate" element={<Generate />} />
@@ -32,6 +43,7 @@ export default function App() {
                 <Route path="/preview" element={<YTPreview />} />
                 <Route path="/login" element={<Login />} />
             </Routes>
+            {/* Persistent footer */}
             <Footer />
         </>
     );

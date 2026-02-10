@@ -2,8 +2,20 @@ import type React from "react";
 import { thumbnailStyles, type ThumbnailStyle } from "../assets/assets"
 import { ChevronDownIcon, CpuIcon, ImageIcon, PenToolIcon, SparkleIcon, SquareIcon } from "lucide-react";
 
+/**
+ * StyleSelector - Dropdown selector for choosing a thumbnail design style.
+ * Displays the currently selected style with an icon and description,
+ * and expands to show all available styles when clicked.
+ *
+ * Props:
+ * - value: currently selected ThumbnailStyle
+ * - onChange: callback when a new style is selected
+ * - isOpen: whether the dropdown is expanded
+ * - setIsOpen: callback to toggle the dropdown
+ */
 const StyleSelector = ({value, onChange, isOpen, setIsOpen}: {value: ThumbnailStyle; onChange: (style: ThumbnailStyle) => void; isOpen: boolean; setIsOpen: (open: boolean) => void}) => {
 
+    // Human-readable descriptions for each thumbnail style
     const styleDescriptions: Record<ThumbnailStyle, string> = {
         "Bold & Graphic": "Vibrant colors, strong contrasts, and eye-catching graphics.",
         "Minimalist": "Clean design with ample white space and simple elements.",
@@ -12,6 +24,7 @@ const StyleSelector = ({value, onChange, isOpen, setIsOpen}: {value: ThumbnailSt
         "Tech/Futuristic": "Sleek designs with modern, high-tech elements and neon accents."
     }
 
+    // Icon components mapped to each style for visual identification
     const styleIcons: Record<ThumbnailStyle, React.ReactNode> = {
         "Bold & Graphic": <SparkleIcon className="h-4 w-4" />,
         "Minimalist": <SquareIcon className="h-4 w-4" />,
@@ -24,6 +37,7 @@ const StyleSelector = ({value, onChange, isOpen, setIsOpen}: {value: ThumbnailSt
         <div className="relative space-y-3 dark">
             <label className="block text-sm font-medium text-zinc-200">Thumbnail Style</label>
 
+            {/* Toggle button showing the selected style with icon and description */}
             <button type="button" onClick={() => setIsOpen(!isOpen)} className=" w-full px-4 py-3 rounded-md bg-black/20 border border-white/10 text-zinc-200 text-left hover:bg-white/12 transition flex items-center justify-between">
                 <div className="space-y-1">
                     <div className="flex items-center gap-2 font-medium">
@@ -32,9 +46,11 @@ const StyleSelector = ({value, onChange, isOpen, setIsOpen}: {value: ThumbnailSt
                     </div>
                     <p className="text-xs text-zinc-400">{styleDescriptions[value]}</p>
                 </div>
+                {/* Chevron rotates 180° when dropdown is open */}
                 <ChevronDownIcon className={['h-5 w-5 text-zinc-400 transition-transform', isOpen && "rotate-180"].join(" ")} />
             </button>
 
+            {/* Dropdown list of all available styles */}
             {isOpen && (
                 <div className="absolute bottom-0 z-50 mt-1 w-full rounded-md border border-white/12 bg-black/20 backdrop-blur-3xl shadow-lg">
                     {thumbnailStyles.map((style) => (
